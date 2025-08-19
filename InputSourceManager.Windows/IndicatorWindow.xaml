@@ -13,3 +13,4 @@
         <TextBlock x:Name="TxtIndicator" Text="EN" Foreground="White" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Border>
 </Window>
+

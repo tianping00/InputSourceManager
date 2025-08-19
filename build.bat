@@ -49,3 +49,4 @@ echo   跨平台版本: dotnet publish InputSourceManager -c Release
 echo   Windows版本: dotnet publish InputSourceManager.Windows -c Release
 echo.
 pause
+

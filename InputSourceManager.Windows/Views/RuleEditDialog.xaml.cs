@@ -252,3 +252,4 @@ namespace InputSourceManager.Windows.Views
         }
     }
 }
+

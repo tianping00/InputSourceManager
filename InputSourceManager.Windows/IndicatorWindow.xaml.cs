@@ -39,3 +39,4 @@ namespace InputSourceManager.Windows
 		}
 	}
 }
+
