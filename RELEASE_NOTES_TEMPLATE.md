@@ -12,8 +12,8 @@
 - 
 
 ### 📦 下载
-- **框架依赖版本** (需要 .NET 8.0 Desktop Runtime): [InputSourceManager-Windows-fxdep.zip](https://github.com/your-username/InputSourceManager/releases/download/vX.X.X/InputSourceManager-Windows-fxdep.zip)
-- **自包含版本** (无需额外安装): [InputSourceManager-Windows-selfcontained.zip](https://github.com/your-username/InputSourceManager/releases/download/vX.X.X/InputSourceManager-Windows-selfcontained.zip)
+- **框架依赖版本** (需要 .NET 8.0 Desktop Runtime): [InputSourceManager-Windows-fxdep.zip](https://github.com/tianping00/InputSourceManager/releases/download/vX.X.X/InputSourceManager-Windows-fxdep.zip)
+- **自包含版本** (无需额外安装): [InputSourceManager-Windows-selfcontained.zip](https://github.com/tianping00/InputSourceManager/releases/download/vX.X.X/InputSourceManager-Windows-selfcontained.zip)
 
 ### 📋 系统要求
 - **操作系统**: Windows 10/11 (64位)
