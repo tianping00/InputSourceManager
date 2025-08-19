@@ -38,3 +38,4 @@ echo
 echo "注意: Windows 版本需要在 Windows 系统上构建"
 echo "在 Windows 上运行: dotnet build InputSourceManager.Windows"
 
+

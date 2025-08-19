@@ -50,3 +50,4 @@ echo   Windows版本: dotnet publish InputSourceManager.Windows -c Release
 echo.
 pause
 
+
