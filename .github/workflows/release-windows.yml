@@ -1,0 +1,57 @@
+name: 发布 Windows 版本
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 还原包
+        run: dotnet restore InputSourceManager.sln
+
+      - name: 发布 (框架依赖版本)
+        run: dotnet publish InputSourceManager.Windows/InputSourceManager.Windows.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=false -o out/win-fxdep
+
+      - name: 发布 (自包含版本)
+        run: dotnet publish InputSourceManager.Windows/InputSourceManager.Windows.csproj -c Release -r win-x64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -o out/win-selfcontained
+
+      - name: 打包制品
+        shell: pwsh
+        run: |
+          Compress-Archive -Path out/win-fxdep/* -DestinationPath out/InputSourceManager-Windows-fxdep.zip -Force
+          Compress-Archive -Path out/win-selfcontained/* -DestinationPath out/InputSourceManager-Windows-selfcontained.zip -Force
+
+      - name: 上传制品
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builds
+          path: out/*.zip
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: windows-latest
+    steps:
+      - name: 下载制品
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-builds
+          path: out
+
+      - name: 创建 GitHub 发布
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.zip
+

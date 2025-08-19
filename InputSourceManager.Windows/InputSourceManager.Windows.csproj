@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <DefineConstants>WINDOWS</DefineConstants>
+    <AssemblyTitle>Input Source Manager (Windows)</AssemblyTitle>
+    <AssemblyDescription>Windows input source management utility</AssemblyDescription>
+    <AssemblyCompany>InputSourceManager</AssemblyCompany>
+    <AssemblyProduct>Input Source Manager</AssemblyProduct>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../InputSourceManager/InputSourceManager.csproj" />
+  </ItemGroup>
+
+</Project>
