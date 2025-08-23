@@ -12,8 +12,8 @@
     <AssemblyDescription>Windows input source management utility</AssemblyDescription>
     <AssemblyCompany>InputSourceManager</AssemblyCompany>
     <AssemblyProduct>Input Source Manager</AssemblyProduct>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.7.0</AssemblyVersion>
+    <FileVersion>1.0.7.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

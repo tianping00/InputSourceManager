@@ -46,7 +46,7 @@ namespace InputSourceManager.Windows
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
-			TxtVersion.Text = $"v1.0.0";
+			TxtVersion.Text = $"v1.0.7";
 			
 			// 初始化开机自启动状态
 			ChkAutoStart.IsChecked = _startupService.IsStartupEnabled();
