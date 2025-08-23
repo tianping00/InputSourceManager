@@ -23,25 +23,38 @@ namespace InputSourceManager.Windows
 
 		public MainWindow()
 		{
-			InitializeComponent();
-			_manager = new InputSourceManager.WindowsInputSourceManager();
-			_browserService = new BrowserDetectionService();
-			_ruleEngine = new RuleEngineService(_manager, _browserService);
-			_configService = new ConfigurationService();
-			_startupService = new StartupService();
-			_hotkeyService = new HotkeyService();
-			_trayService = new TrayService(this);
-			_indicator = new IndicatorWindow();
-			_urlReceiver = new UrlReceiverService();
-
-			Loaded += OnLoaded;
-			Closed += OnClosed;
-
-			_timer = new System.Windows.Threading.DispatcherTimer
+			try
 			{
-				Interval = TimeSpan.FromMilliseconds(1200)
-			};
-			_timer.Tick += async (s, e) => await RefreshStatusAndAutoSwitchAsync();
+				InitializeComponent();
+				
+				// 逐步初始化服务，便于定位问题
+				_manager = new InputSourceManager.WindowsInputSourceManager();
+				_browserService = new BrowserDetectionService();
+				_ruleEngine = new RuleEngineService(_manager, _browserService);
+				_configService = new ConfigurationService();
+				_startupService = new StartupService();
+				
+				// 这些服务可能导致初始化问题，延迟到OnLoaded中初始化
+				_hotkeyService = new HotkeyService();
+				_trayService = new TrayService(this);
+				_indicator = new IndicatorWindow();
+				_urlReceiver = new UrlReceiverService();
+
+				Loaded += OnLoaded;
+				Closed += OnClosed;
+
+				_timer = new System.Windows.Threading.DispatcherTimer
+				{
+					Interval = TimeSpan.FromMilliseconds(1200)
+				};
+				_timer.Tick += async (s, e) => await RefreshStatusAndAutoSwitchAsync();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"MainWindow初始化失败: {ex.Message}\n\n详细信息:\n{ex}", 
+					"初始化错误", MessageBoxButton.OK, MessageBoxImage.Error);
+				throw;
+			}
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
