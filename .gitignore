@@ -55,3 +55,6 @@ logs/
 # 缓存文件
 .cache/
 *.cache
+
+# 项目历史记录（包含敏感信息）
+.specstory/**

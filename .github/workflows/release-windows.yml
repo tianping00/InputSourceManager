@@ -2,6 +2,9 @@ name: 发布 Windows 版本
 
 on:
   push:
+    branches:
+      - master
+      - main
     tags:
       - 'v*'
   workflow_dispatch:
@@ -22,16 +25,43 @@ jobs:
         run: dotnet restore InputSourceManager.sln
 
       - name: 发布 (框架依赖版本)
-        run: dotnet publish InputSourceManager.Windows/InputSourceManager.Windows.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=false -o out/win-fxdep
+        run: dotnet publish InputSourceManager.Windows/InputSourceManager.Windows.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:PublishTrimmed=false -o out/win-fxdep
 
       - name: 发布 (自包含版本)
-        run: dotnet publish InputSourceManager.Windows/InputSourceManager.Windows.csproj -c Release -r win-x64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -o out/win-selfcontained
+        run: dotnet publish InputSourceManager.Windows/InputSourceManager.Windows.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=false -o out/win-selfcontained
+
+      - name: 验证exe文件生成
+        shell: pwsh
+        run: |
+          Write-Host "检查框架依赖版本..."
+          $fxdepExe = Get-ChildItem "out/win-fxdep/*.exe" -ErrorAction SilentlyContinue
+          if ($fxdepExe) {
+            Write-Host "✅ 框架依赖版本exe文件: $($fxdepExe.Name)"
+          } else {
+            Write-Host "❌ 框架依赖版本未生成exe文件"
+            exit 1
+          }
+          
+          Write-Host "检查自包含版本..."
+          $selfExe = Get-ChildItem "out/win-selfcontained/*.exe" -ErrorAction SilentlyContinue
+          if ($selfExe) {
+            Write-Host "✅ 自包含版本exe文件: $($selfExe.Name)"
+          } else {
+            Write-Host "❌ 自包含版本未生成exe文件"
+            exit 1
+          }
+          
+          Write-Host "✅ 两个版本都成功生成了exe文件"
 
       - name: 打包制品
         shell: pwsh
         run: |
           Compress-Archive -Path out/win-fxdep/* -DestinationPath out/InputSourceManager-Windows-fxdep.zip -Force
           Compress-Archive -Path out/win-selfcontained/* -DestinationPath out/InputSourceManager-Windows-selfcontained.zip -Force
+          
+          Write-Host "✅ 已创建发布包:"
+          Write-Host "  - InputSourceManager-Windows-fxdep.zip"
+          Write-Host "  - InputSourceManager-Windows-selfcontained.zip"
 
       - name: 上传制品
         uses: actions/upload-artifact@v4

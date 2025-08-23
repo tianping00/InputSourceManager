@@ -11,7 +11,7 @@ namespace InputSourceManager.Windows.Views
     public partial class SettingsPage : UserControl
     {
         private StartupService? _startupService;
-        private InputSourceManager? _inputSourceManager;
+        private InputSourceManager.InputSourceManagerBase? _inputSourceManager;
         private ConfigurationService? _configService;
         private AppSettings _currentSettings;
 
@@ -21,7 +21,7 @@ namespace InputSourceManager.Windows.Views
             _currentSettings = new AppSettings();
         }
 
-        public void Initialize(StartupService startupService, InputSourceManager inputSourceManager, ConfigurationService configService)
+        public void Initialize(StartupService startupService, InputSourceManager.InputSourceManagerBase inputSourceManager, ConfigurationService configService)
         {
             _startupService = startupService;
             _inputSourceManager = inputSourceManager;
@@ -42,13 +42,13 @@ namespace InputSourceManager.Windows.Views
             LoadInputSources();
         }
 
-        private async void LoadInputSources()
+        private void LoadInputSources()
         {
             if (_inputSourceManager == null) return;
 
             try
             {
-                var inputSources = await _inputSourceManager.GetAvailableInputSourcesAsync();
+                var inputSources = _inputSourceManager.GetAvailableInputSourcesAsync().Result;
                 CmbDefaultChinese.ItemsSource = inputSources;
                 CmbDefaultEnglish.ItemsSource = inputSources;
                 
@@ -90,7 +90,7 @@ namespace InputSourceManager.Windows.Views
             }
         }
 
-        private async void ChkAutoStart_Checked(object sender, RoutedEventArgs e)
+        private void ChkAutoStart_Checked(object sender, RoutedEventArgs e)
         {
             if (_startupService == null) return;
 
@@ -113,7 +113,7 @@ namespace InputSourceManager.Windows.Views
             }
         }
 
-        private async void ChkAutoStart_Unchecked(object sender, RoutedEventArgs e)
+        private void ChkAutoStart_Unchecked(object sender, RoutedEventArgs e)
         {
             if (_startupService == null) return;
 
@@ -164,22 +164,22 @@ namespace InputSourceManager.Windows.Views
             return hotkey.Contains("Ctrl") || hotkey.Contains("Alt") || hotkey.Contains("Shift");
         }
 
-        private async void BtnRefreshInputSources_Click(object sender, RoutedEventArgs e)
+        private void BtnRefreshInputSources_Click(object sender, RoutedEventArgs e)
         {
-            await LoadInputSources();
+            LoadInputSources();
             MessageBox.Show("输入法列表已刷新", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private async void BtnTestInputSources_Click(object sender, RoutedEventArgs e)
+        private void BtnTestInputSources_Click(object sender, RoutedEventArgs e)
         {
             if (_inputSourceManager == null) return;
 
             try
             {
-                var currentInputSource = await _inputSourceManager.GetCurrentInputSourceAsync();
+                var currentInputSource = _inputSourceManager.GetCurrentInputSourceAsync().Result;
                 var targetInputSource = currentInputSource?.Contains("中文") == true ? "英语 (美国)" : "中文 (简体)";
                 
-                if (await _inputSourceManager.SwitchToInputSourceAsync(targetInputSource))
+                if (_inputSourceManager.SwitchToInputSourceAsync(targetInputSource).Result)
                 {
                     MessageBox.Show($"测试成功！已切换到: {targetInputSource}", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -190,7 +190,7 @@ namespace InputSourceManager.Windows.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"测试输入法切换时出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"测试输入法时出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -10,12 +10,12 @@ namespace InputSourceManager.Services
     public class RuleEngineService
     {
         private readonly List<InputSourceRule> _rules = new();
-        private readonly InputSourceManager _inputSourceManager;
+        private readonly InputSourceManagerBase _inputSourceManager;
         private readonly BrowserDetectionService _browserService;
         private readonly Dictionary<string, InputSourceRule> _ruleCache = new();
         private readonly object _lockObject = new object();
 
-        public RuleEngineService(InputSourceManager inputSourceManager, BrowserDetectionService browserService)
+        public RuleEngineService(InputSourceManagerBase inputSourceManager, BrowserDetectionService browserService)
         {
             _inputSourceManager = inputSourceManager;
             _browserService = browserService;

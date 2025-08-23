@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using InputSourceManager.Models;
 
@@ -33,7 +35,8 @@ namespace InputSourceManager.Windows
 			try
 			{
 				_listener.Start();
-				Console.WriteLine($"URL 接收服务已启动: {_listener.Prefixes[0]}");
+				var prefix = _listener.Prefixes.Count > 0 ? _listener.Prefixes.FirstOrDefault() : "http://127.0.0.1:43219/";
+				Console.WriteLine($"URL 接收服务已启动: {prefix}");
 				
 				while (!token.IsCancellationRequested)
 				{

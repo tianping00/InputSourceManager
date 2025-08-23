@@ -23,7 +23,7 @@ namespace InputSourceManager.Windows
                 if (key != null)
                 {
                     var value = key.GetValue(AppName);
-                    return value != null && value.ToString().Contains(AppName);
+                    return value != null && value.ToString()?.Contains(AppName) == true;
                 }
             }
             catch (Exception ex)
@@ -40,10 +40,16 @@ namespace InputSourceManager.Windows
         {
             try
             {
-                var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                // 对于单文件应用程序，优先使用Process.MainModule.FileName
+                var exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
                 if (string.IsNullOrEmpty(exePath))
                 {
-                    exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                    // 使用AppContext.BaseDirectory作为备选方案
+                    var baseDir = System.AppContext.BaseDirectory;
+                    if (!string.IsNullOrEmpty(baseDir))
+                    {
+                        exePath = Path.Combine(baseDir, "InputSourceManager.Windows.exe");
+                    }
                 }
 
                 if (string.IsNullOrEmpty(exePath))
@@ -107,5 +113,8 @@ namespace InputSourceManager.Windows
         }
     }
 }
+
+
+
 
 

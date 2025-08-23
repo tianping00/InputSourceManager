@@ -213,18 +213,18 @@ namespace InputSourceManager.Services
             }
         }
 
-        public virtual async Task<bool> ResetConfigurationAsync()
+        public virtual Task<bool> ResetConfigurationAsync()
         {
             try
             {
                 if (File.Exists(_configFilePath))
                     File.Delete(_configFilePath);
                     
-                return true;
+                return Task.FromResult(true);
             }
             catch
             {
-                return false;
+                return Task.FromResult(false);
             }
         }
 
@@ -255,6 +255,20 @@ namespace InputSourceManager.Services
             catch
             {
                 return default(T);
+            }
+        }
+
+        public async Task<bool> SaveSettingsAsync<T>(T settings)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(settings, _jsonOptions);
+                await File.WriteAllTextAsync(_configFilePath, json);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 

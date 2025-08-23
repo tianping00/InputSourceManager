@@ -14,7 +14,7 @@ namespace InputSourceManager.Tests
             var manager = new WindowsInputSourceManager();
 
             // Assert
-            Assert.IsAssignableFrom<InputSourceManager>(manager);
+            Assert.IsAssignableFrom<InputSourceManagerBase>(manager);
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace InputSourceManager.Tests
             var manager = new LinuxInputSourceManager();
 
             // Assert
-            Assert.IsAssignableFrom<InputSourceManager>(manager);
+            Assert.IsAssignableFrom<InputSourceManagerBase>(manager);
         }
 
         [Fact]

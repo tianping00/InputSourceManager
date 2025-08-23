@@ -16,7 +16,7 @@ namespace InputSourceManager.Windows.Views
     {
         private ConfigurationService? _configService;
         private RuleEngineService? _ruleEngine;
-        private InputSourceManager? _inputSourceManager;
+        private InputSourceManager.InputSourceManagerBase? _inputSourceManager;
         private readonly ObservableCollection<InputSourceRule> _rules;
         private InputSourceRule? _selectedRule;
 
@@ -28,13 +28,13 @@ namespace InputSourceManager.Windows.Views
             InitializeControls();
         }
 
-        public void Initialize(ConfigurationService configService, RuleEngineService ruleEngine, InputSourceManager inputSourceManager)
+        public void Initialize(ConfigurationService configService, RuleEngineService ruleEngine, InputSourceManager.InputSourceManagerBase inputSourceManager)
         {
             _configService = configService;
             _ruleEngine = ruleEngine;
             _inputSourceManager = inputSourceManager;
             
-            LoadRulesAsync();
+            _ = LoadRulesAsync();
         }
 
         private void InitializeControls()
@@ -89,13 +89,13 @@ namespace InputSourceManager.Windows.Views
             }
         }
 
-        private async void LoadRulesAsync()
+        private void LoadRulesAsync()
         {
             if (_configService == null || _ruleEngine == null) return;
 
             try
             {
-                var savedRules = await _configService.LoadRulesAsync();
+                var savedRules = _configService.LoadRulesAsync().Result;
                 _rules.Clear();
                 
                 foreach (var rule in savedRules)
@@ -115,7 +115,7 @@ namespace InputSourceManager.Windows.Views
             }
         }
 
-        private async void BtnAddRule_Click(object sender, RoutedEventArgs e)
+        private void BtnAddRule_Click(object sender, RoutedEventArgs e)
         {
             if (_inputSourceManager == null)
             {
@@ -130,7 +130,7 @@ namespace InputSourceManager.Windows.Views
             if (dialog.ShowDialog() == true)
             {
                 // 规则已保存，刷新列表
-                await RefreshRulesAsync();
+                _ = RefreshRulesAsync();
             }
         }
 
@@ -139,7 +139,7 @@ namespace InputSourceManager.Windows.Views
             _selectedRule = DgRules.SelectedItem as InputSourceRule;
         }
 
-        private async void BtnEditRule_Click(object sender, RoutedEventArgs e)
+        private void BtnEditRule_Click(object sender, RoutedEventArgs e)
         {
             if (_inputSourceManager == null)
             {
@@ -160,7 +160,7 @@ namespace InputSourceManager.Windows.Views
             if (dialog.ShowDialog() == true)
             {
                 // 规则已保存，刷新列表
-                await RefreshRulesAsync();
+                _ = RefreshRulesAsync();
             }
         }
 
@@ -181,7 +181,7 @@ namespace InputSourceManager.Windows.Views
             }
         }
 
-        private async void BtnDeleteRule_Click(object sender, RoutedEventArgs e)
+        private void BtnDeleteRule_Click(object sender, RoutedEventArgs e)
         {
             if (_configService == null || _ruleEngine == null)
             {
@@ -202,12 +202,12 @@ namespace InputSourceManager.Windows.Views
             {
                 _rules.Remove(_selectedRule);
                 _ruleEngine.RemoveRule(_selectedRule.Id);
-                await SaveRulesAsync();
+                _ = SaveRulesAsync();
                 _selectedRule = null;
             }
         }
 
-        private async void BtnExport_Click(object sender, RoutedEventArgs e)
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
             if (_configService == null)
             {
@@ -225,7 +225,7 @@ namespace InputSourceManager.Windows.Views
 
                 if (saveDialog.ShowDialog() == true)
                 {
-                    var success = await _configService.ExportRulesAsync(saveDialog.FileName, _rules.ToList());
+                    var success = _configService.ExportRulesAsync(saveDialog.FileName, _rules.ToList()).Result;
                     if (success)
                     {
                         MessageBox.Show("配置导出成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -242,7 +242,7 @@ namespace InputSourceManager.Windows.Views
             }
         }
 
-        private async void BtnImport_Click(object sender, RoutedEventArgs e)
+        private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
             if (_configService == null || _ruleEngine == null)
             {
@@ -259,7 +259,7 @@ namespace InputSourceManager.Windows.Views
 
                 if (openDialog.ShowDialog() == true)
                 {
-                    var importedRules = await _configService.ImportRulesAsync(openDialog.FileName);
+                    var importedRules = _configService.ImportRulesAsync(openDialog.FileName).Result;
                     if (importedRules.Count > 0)
                     {
                         var result = MessageBox.Show($"导入 {importedRules.Count} 条规则，是否替换现有规则？", 
@@ -273,7 +273,7 @@ namespace InputSourceManager.Windows.Views
                                 _rules.Add(rule);
                                 _ruleEngine.AddRule(rule);
                             }
-                            await SaveRulesAsync();
+                            _ = SaveRulesAsync();
                             MessageBox.Show("配置导入成功！", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                     }
@@ -289,7 +289,7 @@ namespace InputSourceManager.Windows.Views
             }
         }
 
-        private async void BtnReset_Click(object sender, RoutedEventArgs e)
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
             if (_configService == null || _ruleEngine == null)
             {
@@ -304,7 +304,7 @@ namespace InputSourceManager.Windows.Views
             {
                 try
                 {
-                    await _configService.ResetConfigurationAsync();
+                    _configService.ResetConfigurationAsync().Wait();
                     _rules.Clear();
                     _ruleEngine.ClearRules();
                     AddSampleRules();

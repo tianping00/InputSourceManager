@@ -327,18 +327,18 @@ namespace InputSourceManager.Tests
             }
 
             // 重写ResetConfigurationAsync以使用测试路径
-            public override async Task<bool> ResetConfigurationAsync()
+            public override Task<bool> ResetConfigurationAsync()
             {
                 try
                 {
                     if (File.Exists(_configPath))
                         File.Delete(_configPath);
                         
-                    return true;
+                    return Task.FromResult(true);
                 }
                 catch
                 {
-                    return false;
+                    return Task.FromResult(false);
                 }
             }
 

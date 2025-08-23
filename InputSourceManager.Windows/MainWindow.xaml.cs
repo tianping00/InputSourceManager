@@ -9,7 +9,7 @@ namespace InputSourceManager.Windows
 {
 	public partial class MainWindow : Window
 	{
-		private readonly InputSourceManager _manager;
+		private readonly InputSourceManager.InputSourceManagerBase _manager;
 		private readonly RuleEngineService _ruleEngine;
 		private readonly BrowserDetectionService _browserService;
 		private readonly HotkeyService _hotkeyService;
@@ -24,7 +24,7 @@ namespace InputSourceManager.Windows
 		public MainWindow()
 		{
 			InitializeComponent();
-			_manager = new InputSourceManager();
+			_manager = new InputSourceManager.WindowsInputSourceManager();
 			_browserService = new BrowserDetectionService();
 			_ruleEngine = new RuleEngineService(_manager, _browserService);
 			_configService = new ConfigurationService();
@@ -44,7 +44,7 @@ namespace InputSourceManager.Windows
 			_timer.Tick += async (s, e) => await RefreshStatusAndAutoSwitchAsync();
 		}
 
-		private async void OnLoaded(object sender, RoutedEventArgs e)
+		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
 			TxtVersion.Text = $"v1.0.0";
 			
@@ -68,7 +68,7 @@ namespace InputSourceManager.Windows
 			_urlReceiver.UrlReceived += OnUrlReceived;
 			
 			// 启动服务
-			await RefreshStatusAsync();
+			_ = RefreshStatusAsync();
 			_timer.Start();
 			_ = _urlReceiver.StartAsync(_cts.Token);
 		}
@@ -92,35 +92,49 @@ namespace InputSourceManager.Windows
 		}
 
 		// URL 接收事件处理
-		private async void OnUrlReceived(object? sender, UrlReceivedEventArgs e)
+		private void OnUrlReceived(object? sender, UrlReceivedEventArgs e)
 		{
 			try
 			{
 				// 在 UI 线程上更新状态
-				await Dispatcher.InvokeAsync(async () =>
+				Dispatcher.Invoke(() =>
 				{
-					TxtStatus.Text = $"检测到网站: {e.Domain}";
-					
-					// 尝试执行网站规则
-					if (ChkAutoSwitch.IsChecked == true)
+					TxtCurrentUrl.Text = e.Url;
+					TxtCurrentDomain.Text = e.Domain;
+					TxtLastUpdate.Text = DateTime.Now.ToString("HH:mm:ss");
+				});
+
+				// 执行规则匹配
+				_ = Task.Run(async () =>
+				{
+					try
 					{
-						var currentInputSource = await _manager.GetCurrentInputSourceAsync();
-						var executed = await _ruleEngine.ExecuteRulesAsync("browser", currentInputSource ?? string.Empty);
-						
-						if (executed)
+						var ruleExecuted = await _ruleEngine.ExecuteRulesAsync(e.Domain, "Website");
+						if (ruleExecuted)
 						{
-							var newInputSource = await _manager.GetCurrentInputSourceAsync();
-							ShowIndicator(newInputSource);
-							TxtStatus.Text = $"已根据网站规则切换到: {newInputSource}";
+							Dispatcher.Invoke(() =>
+							{
+								TxtRuleStatus.Text = "规则已执行";
+								TxtRuleStatus.Foreground = System.Windows.Media.Brushes.Green;
+							});
 						}
+					}
+					catch (Exception ex)
+					{
+						Dispatcher.Invoke(() =>
+						{
+							TxtRuleStatus.Text = $"规则执行失败: {ex.Message}";
+							TxtRuleStatus.Foreground = System.Windows.Media.Brushes.Red;
+						});
 					}
 				});
 			}
 			catch (Exception ex)
 			{
-				await Dispatcher.InvokeAsync(() =>
+				Dispatcher.Invoke(() =>
 				{
-					TxtStatus.Text = $"处理网站规则时出错: {ex.Message}";
+					TxtRuleStatus.Text = $"处理URL时出错: {ex.Message}";
+					TxtRuleStatus.Foreground = System.Windows.Media.Brushes.Red;
 				});
 			}
 		}

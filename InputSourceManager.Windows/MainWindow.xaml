@@ -37,13 +37,17 @@
 						<TextBlock x:Name="TxtCurrentApp" Text="-" Margin="0,6,0,16"/>
 						<TextBlock Text="当前输入法" FontWeight="Bold"/>
 						<TextBlock x:Name="TxtCurrentLayout" Text="-" Margin="0,6,0,16"/>
+						<TextBlock Text="当前网址" FontWeight="Bold"/>
+						<TextBlock x:Name="TxtCurrentUrl" Text="-" Margin="0,6,0,16"/>
+						<TextBlock Text="当前域名" FontWeight="Bold"/>
+						<TextBlock x:Name="TxtCurrentDomain" Text="-" Margin="0,6,0,16"/>
 						<StackPanel Orientation="Horizontal" Margin="0,8,0,0">
 							<Button x:Name="BtnRefresh" Content="刷新" Width="96" Margin="0,0,8,0" Click="BtnRefresh_Click"/>
 							<Button x:Name="BtnToggle" Content="切换中/英" Width="120" Click="BtnToggle_Click"/>
 						</StackPanel>
 					</StackPanel>
 
-					<GroupBox Grid.Column="1" Header="热键与托盘">
+					<GroupBox Grid.Column="1" Header="热键与状态">
 						<StackPanel Margin="12">
 							<TextBlock Text="全局快捷键（默认 Ctrl+Alt+Space）"/>
 							<TextBox x:Name="TxtHotkey" Text="Ctrl+Alt+Space" Margin="0,6,0,12"/>
@@ -51,6 +55,11 @@
 							<Separator Margin="0,12,0,12"/>
 							<CheckBox x:Name="ChkAutoStart" Content="开机自启动" IsChecked="False"/>
 							<CheckBox x:Name="ChkAutoSwitch" Content="启用自动切换" IsChecked="True"/>
+							<Separator Margin="0,12,0,12"/>
+							<TextBlock Text="规则状态" FontWeight="Bold"/>
+							<TextBlock x:Name="TxtRuleStatus" Text="等待中" Margin="0,6,0,12"/>
+							<TextBlock Text="上次更新" FontWeight="Bold"/>
+							<TextBlock x:Name="TxtLastUpdate" Text="-" Margin="0,6,0,12"/>
 						</StackPanel>
 					</GroupBox>
 				</Grid>

@@ -27,7 +27,7 @@ namespace InputSourceManager.Windows
 		{
 			var menu = new ContextMenuStrip();
 			menu.Items.Add("显示主窗口", null, (s, e) => RestoreFromTray());
-			menu.Items.Add("退出", null, (s, e) => Application.Current.Shutdown());
+			menu.Items.Add("退出", null, (s, e) => System.Windows.Application.Current.Shutdown());
 			return menu;
 		}
 
@@ -53,5 +53,8 @@ namespace InputSourceManager.Windows
 		}
 	}
 }
+
+
+
 
 

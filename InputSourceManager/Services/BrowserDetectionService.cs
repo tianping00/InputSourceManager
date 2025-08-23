@@ -25,13 +25,14 @@ namespace InputSourceManager.Services
                         .ToArray();
 
                     if (browserProcesses.Length == 0)
-                        return null;
+                        return string.Empty;
 
                     // 检查缓存
                     var cacheKey = string.Join(",", browserProcesses.Select(p => p.ProcessName));
                     if (IsCacheValid(cacheKey))
                     {
-                        return GetCachedWebsite(cacheKey);
+                        var cachedResult = GetCachedWebsite(cacheKey);
+                        return cachedResult ?? string.Empty;
                     }
 
                     // 这里需要更复杂的实现来获取实际的URL
@@ -47,7 +48,7 @@ namespace InputSourceManager.Services
                 }
                 catch
                 {
-                    return null;
+                    return string.Empty;
                 }
             });
         }

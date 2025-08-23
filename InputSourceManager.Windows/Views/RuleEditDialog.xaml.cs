@@ -9,12 +9,12 @@ namespace InputSourceManager.Windows.Views
 {
     public partial class RuleEditDialog : Window
     {
-        private readonly InputSourceManager _inputSourceManager;
+        private readonly InputSourceManager.InputSourceManagerBase _inputSourceManager;
         private readonly InputSourceRule _rule;
         private readonly bool _isNewRule;
         private readonly Action<InputSourceRule> _onSave;
 
-        public RuleEditDialog(InputSourceManager inputSourceManager, InputSourceRule? rule = null, Action<InputSourceRule>? onSave = null)
+        public RuleEditDialog(InputSourceManager.InputSourceManagerBase inputSourceManager, InputSourceRule? rule = null, Action<InputSourceRule>? onSave = null)
         {
             InitializeComponent();
             _inputSourceManager = inputSourceManager;
@@ -52,11 +52,11 @@ namespace InputSourceManager.Windows.Views
             LoadInputSources();
         }
 
-        private async void LoadInputSources()
+        private void LoadInputSources()
         {
             try
             {
-                var inputSources = await _inputSourceManager.GetAvailableInputSourcesAsync();
+                var inputSources = _inputSourceManager.GetAvailableInputSourcesAsync().Result;
                 CmbTargetInputSource.ItemsSource = inputSources;
                 CmbFallbackInputSource.ItemsSource = inputSources;
                 
@@ -99,7 +99,7 @@ namespace InputSourceManager.Windows.Views
             // 这里可以根据需要扩展
         }
 
-        private async void BtnTest_Click(object sender, RoutedEventArgs e)
+        private void BtnTest_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -110,19 +110,19 @@ namespace InputSourceManager.Windows.Views
                     return;
                 }
 
-                // 测试切换到目标输入法
-                if (await _inputSourceManager.SwitchToInputSourceAsync(targetInputSource))
+                var success = _inputSourceManager.SwitchToInputSourceAsync(targetInputSource).Result;
+                if (success)
                 {
                     MessageBox.Show($"测试成功！已切换到: {targetInputSource}", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    MessageBox.Show("测试失败，无法切换到目标输入法", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("测试失败，无法切换输入法", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"测试规则时出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"测试时出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -210,7 +210,7 @@ namespace InputSourceManager.Windows.Views
             _rule.Type = (RuleType)CmbRuleType.SelectedItem;
             _rule.Target = TxtTarget.Text.Trim();
             _rule.Priority = (int)CmbPriority.SelectedItem;
-            _rule.TargetInputSource = CmbTargetInputSource.SelectedItem.ToString();
+            _rule.TargetInputSource = CmbTargetInputSource.SelectedItem?.ToString() ?? string.Empty;
 
             // 输入法设置
             if (CmbFallbackInputSource.SelectedItem != null)
@@ -252,5 +252,8 @@ namespace InputSourceManager.Windows.Views
         }
     }
 }
+
+
+
 
 

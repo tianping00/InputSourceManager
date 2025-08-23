@@ -15,7 +15,7 @@ namespace InputSourceManager
             Console.WriteLine();
 
             // 根据操作系统选择合适的实现
-            InputSourceManager manager = Environment.OSVersion.Platform == PlatformID.Win32NT 
+            InputSourceManagerBase manager = Environment.OSVersion.Platform == PlatformID.Win32NT 
                 ? new WindowsInputSourceManager() 
                 : new LinuxInputSourceManager();
 

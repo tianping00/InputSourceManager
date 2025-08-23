@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace InputSourceManager
 {
-    public abstract class InputSourceManager
+    public abstract class InputSourceManagerBase
     {
         public abstract Task<string> GetCurrentApplicationAsync();
         public abstract Task<string> GetCurrentInputSourceAsync();
@@ -14,7 +14,7 @@ namespace InputSourceManager
         public abstract Task<bool> SwitchToInputSourceByHotkeyAsync();
     }
 
-    public class WindowsInputSourceManager : InputSourceManager
+    public class WindowsInputSourceManager : InputSourceManagerBase
     {
         // Windows API declarations
         [DllImport("user32.dll")]
@@ -165,7 +165,7 @@ namespace InputSourceManager
         }
     }
 
-    public class LinuxInputSourceManager : InputSourceManager
+    public class LinuxInputSourceManager : InputSourceManagerBase
     {
         public override Task<string> GetCurrentApplicationAsync()
         {

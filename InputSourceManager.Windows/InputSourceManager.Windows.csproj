@@ -7,6 +7,7 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <DefineConstants>WINDOWS</DefineConstants>
+    <SelfContained>false</SelfContained>
     <AssemblyTitle>Input Source Manager (Windows)</AssemblyTitle>
     <AssemblyDescription>Windows input source management utility</AssemblyDescription>
     <AssemblyCompany>InputSourceManager</AssemblyCompany>
@@ -22,9 +23,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../InputSourceManager/InputSourceManager.csproj" />
+    <ProjectReference Include="../InputSourceManager/InputSourceManager.csproj">
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
+
+
+
 
 

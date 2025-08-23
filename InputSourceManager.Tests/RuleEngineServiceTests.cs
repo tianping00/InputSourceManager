@@ -260,7 +260,7 @@ namespace InputSourceManager.Tests
             Assert.Equal(RuleType.Website, websiteRules[0].Type);
         }
 
-        private class MockInputSourceManager : InputSourceManager
+        private class MockInputSourceManager : InputSourceManagerBase
         {
             public override Task<string> GetCurrentApplicationAsync()
             {
@@ -274,7 +274,7 @@ namespace InputSourceManager.Tests
 
             public override Task<string[]> GetAvailableInputSourcesAsync()
             {
-                return Task.FromResult(new string[] { "English", "Chinese" });
+                return Task.FromResult(new[] { "English", "Chinese" });
             }
 
             public override Task<bool> SwitchToInputSourceAsync(string languageName)

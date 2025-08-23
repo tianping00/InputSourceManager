@@ -1,0 +1,18 @@
+* [33m7c447ee[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;33mtag: v1.0.6[m[33m, [m[1;33mtag: v1.0.5[m[33m, [m[1;31morigin/master[m[33m)[m feat: 更新主窗口UI和配置服务 - 优化主窗口布局和样式 - 改进配置服务的测试覆盖 - 更新启动服务和URL接收服务 - 完善规则页面功能 - 清理项目文件结构
+* [33m28e04fd[m fix: resolve all remaining compilation issues and warnings - Fix async void methods without await operators - Remove unnecessary async keywords from event handlers - Fix potential null reference issues - Update GitHub Actions to trigger on every push - Improve code quality and eliminate warnings
+* [33m1ffcc3d[m fix: resolve remaining compilation errors and warnings - Add SaveSettingsAsync method to ConfigurationService - Fix async methods without await operators - Fix potential null reference issues - Fix Application reference ambiguity - Fix Assembly.Location warning for single-file apps - Fix indexing issues in UrlReceiverService
+* [33m1515d3a[m trigger: force GitHub Actions build after compilation fixes
+* [33m127e524[m fix: resolve all compilation errors and namespace conflicts - Remove duplicate WindowsInputSourceManager class definition - Fix all namespace references and type mismatches - Resolve naming conflicts and missing type definitions - Update project structure for better separation of concerns - Add comprehensive compilation fixes documentation
+* [33ma117563[m[33m ([m[1;33mtag: v1.0.4[m[33m)[m 修复编译错误：项目引用配置、异步方法警告和空引用警告
+* [33meb36478[m[33m ([m[1;33mtag: v1.0.3[m[33m)[m 修复项目引用兼容性：在项目文件中添加SelfContained属性，解决NETSDK1151错误
+* [33mb12012c[m 修复GitHub Actions项目引用兼容性问题，添加SelfContained属性
+* [33m23a0118[m[33m ([m[1;33mtag: v1.0.2[m[33m)[m 修复GitHub Actions配置，确保两个版本都能生成exe文件；清理多余文档，只保留README.md
+* [33m1c469b3[m[33m ([m[1;33mtag: v1.0.1[m[33m)[m 🔧 修复GitHub用户名占位符和清理项目文件
+* [33me34b33a[m Complete internationalization setup with English and Chinese documentation
+* [33m1f4fb5e[m Add Chinese version of README for internationalization
+* [33mad42510[m Convert README.md to English version for internationalization
+* [33m13ca344[m Add detailed release notes for version 1.0.0
+* [33m608b1b6[m[33m ([m[1;33mtag: v1.0.0[m[33m)[m Update release notes template with correct GitHub username
+* [33m9d782b8[m Update InputSourceManager with Windows UI improvements and URL receiver functionality
+* [33mfea1b49[m 📚 添加GitHub上传指南
+* [33mf567f37[m 🎉 初始提交: Input Source Manager 项目
