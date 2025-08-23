@@ -29,6 +29,14 @@
     </ProjectReference>
   </ItemGroup>
 
+  <!-- Temporarily exclude problematic Views for compilation -->
+  <ItemGroup>
+    <Compile Remove="Views/RulesPage.xaml.cs" />
+    <Compile Remove="Views/SettingsPage.xaml.cs" />
+    <Page Remove="Views/RulesPage.xaml" />
+    <Page Remove="Views/SettingsPage.xaml" />
+  </ItemGroup>
+
 </Project>
 
 

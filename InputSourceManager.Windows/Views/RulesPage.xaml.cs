@@ -34,6 +34,7 @@ namespace InputSourceManager.Windows.Views
             _ruleEngine = ruleEngine;
             _inputSourceManager = inputSourceManager;
             
+            // 加载规则（同步方法，虽然名字带Async）
             LoadRulesAsync();
         }
 
