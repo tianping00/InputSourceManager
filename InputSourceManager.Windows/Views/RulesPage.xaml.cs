@@ -34,7 +34,7 @@ namespace InputSourceManager.Windows.Views
             _ruleEngine = ruleEngine;
             _inputSourceManager = inputSourceManager;
             
-            _ = LoadRulesAsync();
+            LoadRulesAsync();
         }
 
         private void InitializeControls()
