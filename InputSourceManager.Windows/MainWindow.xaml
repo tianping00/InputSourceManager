@@ -66,13 +66,11 @@
 			</TabItem>
 
 			<TabItem Header="规则配置">
-				<TextBlock Text="规则配置页面 - 临时禁用" Margin="20"/>
-				<!-- <views:RulesPage x:Name="RulesPageControl"/> -->
+				<views:RulesPage x:Name="RulesPageControl"/>
 			</TabItem>
 
 			<TabItem Header="高级设置">
-				<TextBlock Text="设置页面 - 临时禁用" Margin="20"/>
-				<!-- <views:SettingsPage x:Name="SettingsPageControl"/> -->
+				<views:SettingsPage x:Name="SettingsPageControl"/>
 			</TabItem>
 
 			<TabItem Header="关于">
