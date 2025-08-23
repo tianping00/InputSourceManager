@@ -5,7 +5,7 @@
 		xmlns:views="clr-namespace:InputSourceManager.Windows.Views"
 		Title="Input Source Manager" Height="700" Width="1000"
 		WindowStartupLocation="CenterScreen"
-		Background="{DynamicResource MaterialDesignPaper}">
+		Background="White">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -13,16 +13,16 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<materialDesign:ColorZone Grid.Row="0" Mode="PrimaryMid" Padding="16">
+		<Border Grid.Row="0" Background="DarkBlue" Padding="16">
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-				<materialDesign:PackIcon Kind="Keyboard" Width="28" Height="28" Margin="0,0,12,0"/>
-				<TextBlock Text="Input Source Manager" FontSize="20" FontWeight="Bold"/>
-				<TextBlock x:Name="TxtVersion" Text="v1.0.7" Margin="16,0,0,0" VerticalAlignment="Center"/>
+				<TextBlock Text="⌨" FontSize="28" Foreground="White" Margin="0,0,12,0"/>
+				<TextBlock Text="Input Source Manager" FontSize="20" FontWeight="Bold" Foreground="White"/>
+				<TextBlock x:Name="TxtVersion" Text="v1.0.7" Margin="16,0,0,0" VerticalAlignment="Center" Foreground="White"/>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 					<Button x:Name="BtnMinimizeToTray" Content="最小化到托盘" Margin="16,0,0,0" Click="BtnMinimizeToTray_Click"/>
 				</StackPanel>
 			</StackPanel>
-		</materialDesign:ColorZone>
+		</Border>
 
 		<TabControl Grid.Row="1" Margin="16">
 			<TabItem Header="状态">
@@ -66,11 +66,13 @@
 			</TabItem>
 
 			<TabItem Header="规则配置">
-				<views:RulesPage x:Name="RulesPageControl"/>
+				<TextBlock Text="规则配置页面 - 临时禁用" Margin="20"/>
+				<!-- <views:RulesPage x:Name="RulesPageControl"/> -->
 			</TabItem>
 
 			<TabItem Header="高级设置">
-				<views:SettingsPage x:Name="SettingsPageControl"/>
+				<TextBlock Text="设置页面 - 临时禁用" Margin="20"/>
+				<!-- <views:SettingsPage x:Name="SettingsPageControl"/> -->
 			</TabItem>
 
 			<TabItem Header="关于">

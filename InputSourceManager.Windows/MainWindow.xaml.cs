@@ -64,11 +64,11 @@ namespace InputSourceManager.Windows
 			// 初始化开机自启动状态
 			ChkAutoStart.IsChecked = _startupService.IsStartupEnabled();
 			
-			// 初始化规则页面
-			RulesPageControl.Initialize(_configService, _ruleEngine, _manager);
+			// 初始化规则页面 - 临时禁用
+			// RulesPageControl.Initialize(_configService, _ruleEngine, _manager);
 			
-			// 初始化设置页面
-			SettingsPageControl.Initialize(_startupService, _manager, _configService);
+			// 初始化设置页面 - 临时禁用
+			// SettingsPageControl.Initialize(_startupService, _manager, _configService);
 			
 			// 设置窗口消息钩子
 			var source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
