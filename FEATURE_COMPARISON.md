@@ -301,12 +301,13 @@ sudo apt install xdotool
 - [x] 进程检测
   - [x] xdotool集成
   - [x] wmctrl回退
+- [x] 后台服务支持 (实现)
+  - [x] XDG autostart 开机自启动
+  - [x] daemon 模式运行
+  - [x] 通知服务
 - [ ] GUI支持 (可选)
   - [ ] GTK#或Avalonia UI
-  - [ ] 系统托盘
-- [ ] 开机自启动 (可选)
-  - [ ] systemd user service
-  - [ ] XDG autostart
+  - [ ] 系统托盘图标
 
 ---
 
@@ -326,13 +327,14 @@ sudo apt install xdotool
 3. 考虑添加更多语言映射
 
 ### Linux版本 ✅
-**实现状态**: 85% 完成 (核心功能)
+**实现状态**: 95% 完成 (核心功能 + 系统集成)
 - ✅ 核心功能全部实现
 - ✅ IBus/fcitx双框架支持
 - ✅ X11窗口检测完整
 - ✅ 规则引擎完全支持
-- ❌ GUI界面未实现 (可选)
-- ❌ 系统集成未实现 (可选)
+- ✅ 后台服务实现
+- ✅ XDG自启动支持
+- ⚪ GUI界面未实现 (可选，不影响使用)
 
 **已完成**:
 1. ✅ **IBus集成** - 完整实现
@@ -344,11 +346,12 @@ sudo apt install xdotool
    - ✅ 获取应用名称
    - ✅ 多方案回退
 3. ✅ **fcitx支持** - 完整实现
-4. ⚪ **Linux GUI** (可选)
+4. ✅ **后台服务** - 完整实现
+   - ✅ XDG autostart 开机自启动
+   - ✅ daemon 模式运行
+   - ✅ 通知服务
+5. ⚪ **GUI界面** (可选，不影响核心功能)
    - Avalonia UI 或 GTK#
-   - 系统托盘支持
-5. ⚪ **开机自启动** (可选)
-   - systemd user service
 
 ### 与InputSourcePro对比
 - ✅ Windows功能已接近macOS版本
