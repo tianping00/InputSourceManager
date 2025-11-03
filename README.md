@@ -222,4 +222,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Input Source Manager - 智能的跨平台输入法管理工具** 🎯
-# Trigger build - Wed Aug 20 08:16:02 CST 2025
+# Trigger build - Mon Nov 03 10:58:39 CST 2025
