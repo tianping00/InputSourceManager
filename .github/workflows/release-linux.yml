@@ -31,7 +31,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: 还原包
-        run: dotnet restore InputSourceManager.sln
+        run: dotnet restore InputSourceManager/InputSourceManager.csproj
 
       - name: 发布 Linux ${{ matrix.runtime }}
         run: |
