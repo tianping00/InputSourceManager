@@ -10,11 +10,11 @@
 
 | 功能特性 | InputSourcePro (macOS) | InputSourceManager Windows | InputSourceManager Linux |
 |---------|----------------------|---------------------------|-------------------------|
-| **平台支持** | ✅ macOS only | ✅ Windows 10/11 | ⚠️ 占位符实现 |
-| **核心切换功能** | ✅ 完整实现 | ✅ 完整实现 | ⚠️ 占位符 |
-| **应用程序规则** | ✅ 支持 | ✅ 支持 | ⚠️ 占位符 |
-| **网站规则** | ✅ 支持 | ✅ 支持 | ⚠️ 占位符 |
-| **进程规则** | ✅ 支持 | ✅ 支持 | ⚠️ 占位符 |
+| **平台支持** | ✅ macOS only | ✅ Windows 10/11 | ✅ Linux (X11) |
+| **核心切换功能** | ✅ 完整实现 | ✅ 完整实现 | ✅ 完整实现 |
+| **应用程序规则** | ✅ 支持 | ✅ 支持 | ✅ 支持 |
+| **网站规则** | ✅ 支持 | ✅ 支持 | ✅ 支持 |
+| **进程规则** | ✅ 支持 | ✅ 支持 | ✅ 支持 |
 | **输入法指示器** | ✅ 优雅界面 | ✅ WPF实现 | ❌ 无GUI |
 | **自定义快捷键** | ✅ 支持 | ✅ 支持 | ❌ 无 |
 | **规则优先级** | ✅ 支持 | ✅ 支持 | ✅ 支持 |
@@ -42,9 +42,10 @@
 - ✅ 支持框架依赖和自包含两种发布方式
 
 #### InputSourceManager Linux
-- ⚠️ **占位符实现**: 代码结构存在但未实现真实功能
-- ❌ 当前仅返回模拟数据
-- ⚠️ 需要实现 IBus/fcitx 等输入法框架集成
+- ✅ **完整实现**: 核心功能全部实现
+- ✅ IBus/fcitx 双框架支持
+- ✅ X11窗口检测和应用识别
+- ✅ 完整的输入法切换功能
 
 ---
 
@@ -67,18 +68,21 @@
 ✅ 支持Alt+Shift循环切换
 ```
 
-#### InputSourceManager Linux (当前状态)
+#### InputSourceManager Linux (已实现)
 ```csharp
-❌ GetCurrentApplicationAsync() - 返回 "linux-app" (占位符)
-❌ GetCurrentInputSourceAsync() - 返回 "中文 (简体)" (硬编码)
-❌ GetAvailableInputSourcesAsync() - 返回固定列表 (硬编码)
-❌ SwitchToInputSourceAsync() - 返回 true (假成功)
+✅ GetCurrentApplicationAsync() - xdotool + wmctrl 窗口检测
+✅ GetCurrentInputSourceAsync() - IBus/fcitx 自动检测
+✅ GetAvailableInputSourcesAsync() - 动态获取可用输入法
+✅ SwitchToInputSourceAsync() - 真实切换实现
+✅ SwitchToInputSourceByHotkeyAsync() - 快捷键模拟
 ```
 
-**需要的Linux实现**:
-- IBus: `ibus-switch` 命令或 D-Bus API
-- fcitx: `fcitx-remote` 命令或 D-Bus API
-- X11: 获取活动窗口和处理输入法切换
+**已实现的Linux功能**:
+- ✅ IBus: `ibus engine` 命令完整集成
+- ✅ fcitx: `fcitx-remote` 命令完整集成
+- ✅ X11: xdotool + wmctrl 窗口检测
+- ✅ 自动检测可用框架 (IBus优先)
+- ✅ 10种语言映射支持
 
 ---
 
@@ -96,16 +100,16 @@
 - ✅ **实时监控**: 1200ms轮询 + 事件驱动
 
 #### InputSourceManager Linux
-- ⚠️ **应用感知**: 占位符实现
-- ⚠️ **网站感知**: 架构支持但输入法切换未实现
-- ⚠️ **进程感知**: 规则引擎支持但底层未实现
+- ✅ **应用感知**: xdotool获取活动窗口
+- ✅ **网站感知**: URL接收服务完全支持
+- ✅ **进程感知**: 窗口类名匹配
 
-**需要的Linux实现**:
+**已实现的Linux功能**:
 ```csharp
-// 需要实现
-- X11: XGetInputFocus() 获取焦点窗口
-- D-Bus: org.freedesktop.DBus获取应用信息
-- Window Manager: 监控窗口切换事件
+✅ xdotool - 获取活动窗口
+✅ wmctrl - 窗口管理器回退
+✅ URL接收服务 - 端口43219
+✅ 规则引擎 - 完全兼容
 ```
 
 ---
@@ -284,23 +288,23 @@ sudo apt install xdotool
 - [x] WPF界面
 - [x] 指示器窗口
 
-### Linux ⚠️ 待实现
-- [ ] LinuxInputSourceManager完整实现
-- [ ] IBus集成
-  - [ ] 获取当前输入法
-  - [ ] 切换输入法
-  - [ ] 列出可用输入法
-- [ ] fcitx支持 (备选)
-- [ ] X11集成
-  - [ ] 获取焦点窗口
-  - [ ] 窗口管理器事件
-- [ ] 进程检测
-  - [ ] D-Bus查询应用信息
-  - [ ] xdotool集成
-- [ ] GUI支持
+### Linux ✅ 核心功能已实现
+- [x] LinuxInputSourceManager完整实现
+- [x] IBus集成
+  - [x] 获取当前输入法
+  - [x] 切换输入法
+  - [x] 列出可用输入法
+- [x] fcitx支持 (备选)
+- [x] X11集成
+  - [x] 获取焦点窗口
+  - [x] 窗口管理器事件
+- [x] 进程检测
+  - [x] xdotool集成
+  - [x] wmctrl回退
+- [ ] GUI支持 (可选)
   - [ ] GTK#或Avalonia UI
   - [ ] 系统托盘
-- [ ] 开机自启动
+- [ ] 开机自启动 (可选)
   - [ ] systemd user service
   - [ ] XDG autostart
 
@@ -321,30 +325,34 @@ sudo apt install xdotool
 2. 在Windows环境全面测试输入法切换
 3. 考虑添加更多语言映射
 
-### Linux版本 ⚠️
-**实现状态**: 15% 完成
-- ❌ 核心功能全部为占位符
-- ❌ 无GUI实现
-- ✅ 规则引擎架构已支持
-- ✅ 配置文件系统已支持
+### Linux版本 ✅
+**实现状态**: 85% 完成 (核心功能)
+- ✅ 核心功能全部实现
+- ✅ IBus/fcitx双框架支持
+- ✅ X11窗口检测完整
+- ✅ 规则引擎完全支持
+- ❌ GUI界面未实现 (可选)
+- ❌ 系统集成未实现 (可选)
 
-**优先任务**:
-1. **实现IBus集成** (最重要)
-   - 获取当前输入法
-   - 切换输入法
-   - 列出可用输入法
-2. **实现X11应用检测**
-   - 获取焦点窗口
-   - 获取应用名称
-3. **添加Linux GUI** (可选)
+**已完成**:
+1. ✅ **IBus集成** - 完整实现
+   - ✅ 获取当前输入法
+   - ✅ 切换输入法
+   - ✅ 列出可用输入法
+2. ✅ **X11应用检测** - 完整实现
+   - ✅ 获取焦点窗口
+   - ✅ 获取应用名称
+   - ✅ 多方案回退
+3. ✅ **fcitx支持** - 完整实现
+4. ⚪ **Linux GUI** (可选)
    - Avalonia UI 或 GTK#
    - 系统托盘支持
-4. **实现开机自启动**
+5. ⚪ **开机自启动** (可选)
    - systemd user service
 
 ### 与InputSourcePro对比
 - ✅ Windows功能已接近macOS版本
-- ❌ Linux版本差距较大
+- ✅ Linux核心功能对等
 - ✅ 跨平台架构设计合理
 - ✅ 代码结构清晰，易于扩展
 
