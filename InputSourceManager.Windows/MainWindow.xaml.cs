@@ -228,5 +228,41 @@ namespace InputSourceManager.Windows
 			RegisterDefaultHotkey();
 			TxtStatus.Text = "快捷键已应用";
 		}
+
+		private void ChkAutoStart_Checked(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				var success = _startupService.EnableStartup();
+				if (!success)
+				{
+					ChkAutoStart.IsChecked = false;
+					MessageBox.Show("设置开机自启动失败", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			}
+			catch (Exception ex)
+			{
+				ChkAutoStart.IsChecked = false;
+				MessageBox.Show($"设置开机自启动时出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
+
+		private void ChkAutoStart_Unchecked(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				var success = _startupService.DisableStartup();
+				if (!success)
+				{
+					ChkAutoStart.IsChecked = true;
+					MessageBox.Show("取消开机自启动失败", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			}
+			catch (Exception ex)
+			{
+				ChkAutoStart.IsChecked = true;
+				MessageBox.Show($"取消开机自启动时出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
 	}
 }

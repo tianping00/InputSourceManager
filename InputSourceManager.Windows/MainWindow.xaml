@@ -53,7 +53,7 @@
 							<TextBox x:Name="TxtHotkey" Text="Ctrl+Alt+Space" Margin="0,6,0,12"/>
 							<Button x:Name="BtnApplyHotkey" Content="应用快捷键" Width="120" Click="BtnApplyHotkey_Click"/>
 							<Separator Margin="0,12,0,12"/>
-							<CheckBox x:Name="ChkAutoStart" Content="开机自启动" IsChecked="False"/>
+							<CheckBox x:Name="ChkAutoStart" Content="开机自启动" IsChecked="False" Checked="ChkAutoStart_Checked" Unchecked="ChkAutoStart_Unchecked"/>
 							<CheckBox x:Name="ChkAutoSwitch" Content="启用自动切换" IsChecked="True"/>
 							<Separator Margin="0,12,0,12"/>
 							<TextBlock Text="规则状态" FontWeight="Bold"/>
