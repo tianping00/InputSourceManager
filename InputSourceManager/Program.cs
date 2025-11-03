@@ -9,15 +9,22 @@ namespace InputSourceManager
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("=== Input Source Manager ===");
-            Console.WriteLine("Windows 输入源管理工具");
-            Console.WriteLine("版本: 1.0.0");
-            Console.WriteLine();
-
             // 根据操作系统选择合适的实现
             InputSourceManagerBase manager = Environment.OSVersion.Platform == PlatformID.Win32NT 
                 ? new WindowsInputSourceManager() 
                 : new LinuxInputSourceManager();
+
+            // 检查是否为Linux TUI模式
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT && args.Length == 0)
+            {
+                await RunTUIAsync(manager);
+                return;
+            }
+
+            Console.WriteLine("=== Input Source Manager ===");
+            Console.WriteLine("Windows 输入源管理工具");
+            Console.WriteLine("版本: 1.0.0");
+            Console.WriteLine();
 
             var browserService = new BrowserDetectionService();
             var ruleEngine = new RuleEngineService(manager, browserService);
@@ -186,6 +193,44 @@ namespace InputSourceManager
                 TargetInputSource = "英语 (美国)",
                 Priority = 1
             });
+        }
+
+        /// <summary>
+        /// 运行TUI主循环
+        /// </summary>
+        private static async Task RunTUIAsync(InputSourceManagerBase manager)
+        {
+            while (true)
+            {
+                Views.LinuxTUI.ShowMainMenu();
+                var choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        await Views.LinuxTUI.ShowCurrentStatus(manager);
+                        break;
+                    case "2":
+                        await Views.LinuxTUI.ShowSwitchMenu(manager);
+                        break;
+                    case "3":
+                        Views.LinuxTUI.ShowRulesManagement();
+                        break;
+                    case "4":
+                        await Views.LinuxTUI.ShowSettingsMenu();
+                        break;
+                    case "5":
+                        Views.LinuxTUI.ShowLogs();
+                        break;
+                    case "0":
+                        Console.WriteLine("\n感谢使用！再见！");
+                        return;
+                    default:
+                        Console.WriteLine("\n❌ 无效选择，请重新输入");
+                        await Task.Delay(800);
+                        break;
+                }
+            }
         }
     }
 }
