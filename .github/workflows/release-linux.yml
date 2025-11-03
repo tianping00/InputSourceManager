@@ -1,0 +1,85 @@
+name: 发布 Linux 版本
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        runtime: [linux-x64, linux-arm64]
+        
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 还原包
+        run: dotnet restore InputSourceManager.sln
+
+      - name: 发布 Linux ${{ matrix.runtime }}
+        run: |
+          dotnet publish InputSourceManager/InputSourceManager.csproj \
+            -c Release \
+            -r ${{ matrix.runtime }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:PublishTrimmed=false \
+            -o out/linux-${{ matrix.runtime }}
+
+      - name: 验证可执行文件生成
+        run: |
+          echo "检查 ${{ matrix.runtime }} 可执行文件..."
+          if [ -f out/linux-${{ matrix.runtime }}/InputSourceManager ]; then
+            echo "✅ ${{ matrix.runtime }} 可执行文件已生成"
+            ls -lh out/linux-${{ matrix.runtime }}/InputSourceManager
+          else
+            echo "❌ ${{ matrix.runtime }} 可执行文件未生成"
+            exit 1
+          fi
+
+      - name: 打包制品
+        run: |
+          cd out/linux-${{ matrix.runtime }}
+          tar -czf ../InputSourceManager-Linux-${{ matrix.runtime }}.tar.gz *
+          
+      - name: 上传制品
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ matrix.runtime }}-build
+          path: out/InputSourceManager-Linux-${{ matrix.runtime }}.tar.gz
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 下载所有制品
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: 创建 GitHub 发布
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*.tar.gz
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+
