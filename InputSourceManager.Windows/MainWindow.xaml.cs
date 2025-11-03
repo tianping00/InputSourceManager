@@ -117,12 +117,13 @@ namespace InputSourceManager.Windows
 					TxtLastUpdate.Text = DateTime.Now.ToString("HH:mm:ss");
 				});
 
-				// 执行规则匹配
+				// 执行网站规则匹配
 				_ = Task.Run(async () =>
 				{
 					try
 					{
-						var ruleExecuted = await _ruleEngine.ExecuteRulesAsync(e.Domain, "Website");
+						var currentLayout = await _manager.GetCurrentInputSourceAsync();
+						var ruleExecuted = await _ruleEngine.ExecuteWebsiteRulesAsync(e.Domain, currentLayout ?? string.Empty);
 						if (ruleExecuted)
 						{
 							Dispatcher.Invoke(() =>

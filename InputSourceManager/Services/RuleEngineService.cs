@@ -229,5 +229,53 @@ namespace InputSourceManager.Services
                 }
             });
         }
+
+        /// <summary>
+        /// 执行网站规则（从URL接收器调用）
+        /// </summary>
+        public async Task<bool> ExecuteWebsiteRulesAsync(string domain, string currentInputSource)
+        {
+            try
+            {
+                // 获取匹配的网站规则
+                List<InputSourceRule> websiteRules;
+                lock (_lockObject)
+                {
+                    websiteRules = _rules.Where(r => r.Type == RuleType.Website && 
+                                                   r.IsEnabled &&
+                                                   IsWebsiteMatch(domain, r.Target))
+                                       .ToList();
+                }
+                
+                if (!websiteRules.Any())
+                    return false;
+
+                // 按优先级排序，选择最高优先级的规则
+                var bestRule = websiteRules.OrderByDescending(r => r.Priority).First();
+                
+                // 如果当前输入法已经是目标输入法，不需要切换
+                if (string.Equals(currentInputSource, bestRule.TargetInputSource, StringComparison.OrdinalIgnoreCase))
+                    return false;
+
+                // 执行切换
+                var success = await _inputSourceManager.SwitchToInputSourceAsync(bestRule.TargetInputSource);
+                
+                if (success)
+                {
+                    // 更新规则使用统计
+                    lock (_lockObject)
+                    {
+                        bestRule.LastUsed = DateTime.Now;
+                        bestRule.UsageCount++;
+                    }
+                }
+
+                return success;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

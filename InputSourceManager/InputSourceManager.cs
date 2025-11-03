@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
@@ -71,9 +72,14 @@ namespace InputSourceManager
             {
                 try
                 {
-                    var threadId = GetCurrentThreadId();
-                    var layout = GetKeyboardLayout((int)threadId);
-                    return GetLanguageNameFromLayout(layout);
+                    var foregroundWindow = GetForegroundWindow();
+                    if (foregroundWindow != IntPtr.Zero)
+                    {
+                        var threadId = GetWindowThreadProcessId(foregroundWindow, out _);
+                        var layout = GetKeyboardLayout(threadId);
+                        return GetLanguageNameFromLayout(layout);
+                    }
+                    return "未知";
                 }
                 catch
                 {
@@ -112,8 +118,39 @@ namespace InputSourceManager
             {
                 try
                 {
-                    // 通过快捷键切换（Alt+Shift）
-                    return SwitchToInputSourceByHotkeyAsync().Result;
+                    // 获取所有可用的键盘布局
+                    var layouts = new IntPtr[256];
+                    var count = GetKeyboardLayoutList(layouts.Length, layouts);
+                    
+                    // 查找目标语言的布局
+                    var targetLayout = IntPtr.Zero;
+                    foreach (var layout in layouts.Take(count))
+                    {
+                        var name = GetLanguageNameFromLayout(layout);
+                        if (name.Equals(languageName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            targetLayout = layout;
+                            break;
+                        }
+                    }
+                    
+                    // 如果找不到目标布局，使用快捷键循环切换
+                    if (targetLayout == IntPtr.Zero)
+                    {
+                        return SwitchToInputSourceByHotkeyAsync().Result;
+                    }
+                    
+                    // 获取前台窗口
+                    var foregroundWindow = GetForegroundWindow();
+                    if (foregroundWindow != IntPtr.Zero)
+                    {
+                        // 通过布局ID切换到目标输入法
+                        var layoutIdLow = targetLayout.ToInt32() & 0xFFFF;
+                        PostMessage(foregroundWindow, WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, (IntPtr)layoutIdLow);
+                        return true;
+                    }
+                    
+                    return false;
                 }
                 catch
                 {

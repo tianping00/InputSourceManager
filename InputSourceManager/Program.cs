@@ -84,13 +84,29 @@ namespace InputSourceManager
                 
                 Console.WriteLine();
                 Console.WriteLine("按任意键退出...");
-                Console.ReadKey();
+                try
+                {
+                    Console.ReadKey();
+                }
+                catch (InvalidOperationException)
+                {
+                    // 非交互环境，等待固定时间后退出
+                    System.Threading.Thread.Sleep(3000);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"发生错误: {ex.Message}");
                 Console.WriteLine("按任意键退出...");
-                Console.ReadKey();
+                try
+                {
+                    Console.ReadKey();
+                }
+                catch (InvalidOperationException)
+                {
+                    // 非交互环境，等待固定时间后退出
+                    System.Threading.Thread.Sleep(3000);
+                }
             }
         }
 
