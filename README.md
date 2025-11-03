@@ -86,8 +86,8 @@ InputSource/
 - **Self-contained version** (no additional installation required): [InputSourceManager-Windows-selfcontained.zip](https://github.com/tianping00/InputSourceManager/releases/latest/download/InputSourceManager-Windows-selfcontained.zip)
   **自包含版本**（无需额外安装）
 
-> **Note**: The self-contained version has a larger file size (~100MB) but doesn't require .NET Runtime installation. The framework-dependent version has a smaller file size (~10MB) but requires .NET 8.0 Desktop Runtime to be installed first.
-> **注意**: 自包含版本文件较大（约100MB）但无需安装.NET运行时。框架依赖版本文件较小（约10MB）但需要先安装.NET 8.0桌面运行时。
+> **Note**: The self-contained version has a larger file size (~66MB) but doesn't require .NET Runtime installation. The framework-dependent version has a smaller file size (~3.3MB) but requires .NET 8.0 Desktop Runtime to be installed first.
+> **注意**: 自包含版本文件较大（约66MB）但无需安装.NET运行时。框架依赖版本文件较小（约3.3MB）但需要先安装.NET 8.0桌面运行时。
 
 ### Quick Start / 快速开始
 
